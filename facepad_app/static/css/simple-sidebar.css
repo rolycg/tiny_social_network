@@ -1,0 +1,306 @@
+#wrapper {
+    padding-left: 250px;
+    transition: all 0.4s ease 0s;
+}
+
+#sidebar-wrapper {
+    /*margin-left: -250px;*/
+    /*left: 250px;*/
+    width: 213px;
+    background: #000;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: all 0.4s ease 0s;
+}
+
+#page-content-wrapper {
+    width: 100%;
+}
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    /*padding-top: 17px;*/
+}
+
+.sidebar-nav li {
+    line-height: 40px;
+    color: #999999;
+    /*text-indent: 20px;*/
+}
+
+.sidebar-nav li a {
+    color: #999999;
+    display: block;
+    text-decoration: none;
+    transition: all 0.4s ease 0s;
+}
+
+.sidebar-nav li a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    line-height: 60px;
+    font-size: 18px;
+    margin-top: 17px;
+}
+
+.sidebar-brand > img {
+    max-width: 65px;
+    border-radius: 28px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+.content-header {
+    height: 65px;
+    line-height: 65px;
+}
+
+.content-header h1 {
+    margin: 0;
+    margin-left: 20px;
+    line-height: 60px;
+    display: inline-block;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+.inset {
+    padding: 20px;
+}
+
+.friend-li {
+    text-align: left;
+}
+
+.friend-li > a {
+    padding-left: 17px;
+    height: 40px;
+    overflow-y: hidden;
+}
+
+.friend-li img, .post-user-info img {
+    width: 30px;
+    height: 30px;
+    text-align: left;
+    margin-right: 11px;
+    border-radius: 13px;
+}
+
+@media (max-width: 767px) {
+
+    #wrapper {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        left: 0;
+    }
+
+    #wrapper.active {
+        position: relative;
+        left: 250px;
+    }
+
+    #wrapper.active #sidebar-wrapper {
+        left: 250px;
+        width: 250px;
+        transition: all 0.4s ease 0s;
+    }
+
+    #menu-toggle {
+        display: inline-block;
+    }
+
+    .inset {
+        padding: 15px;
+    }
+
+}
+
+.all-post-container {
+    margin-bottom: 20px;
+}
+
+.all-post-container h2 {
+    text-align: center;
+}
+
+.post-user-info {
+
+}
+
+.post-user-info img {
+    width: 50px;
+    height: 50px;
+    text-align: left;
+    margin-right: 11px;
+    border-radius: 23px;
+}
+
+.post-content {
+    padding-left: 62px;
+}
+
+.post {
+    margin-top: 10px;
+}
+
+.post:after, .post-content-buttons:after, .friend-form:after, .received-message:after, .sended-message:after {
+    content: ' ';
+    clear: both;
+    display: block;
+}
+
+.post-content-text {
+    text-align: justify;
+    border-bottom: 1px solid cornflowerblue;
+}
+
+.post-content-text > p {
+    margin-bottom: 7px;
+}
+
+.post-content-date {
+    text-align: right;
+    color: grey;
+}
+
+.post-content-like-button {
+    font-weight: bold;
+}
+
+.post-content-like-button:hover {
+    text-decoration: none;
+}
+
+.post-user-name {
+    height: 20px;
+    margin-bottom: 5px;
+}
+
+.post-user-name > a {
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.post-user-date {
+    height: 20px;
+    margin-top: 7px;
+}
+
+.post-user-date > a {
+    color: #9d9d9d;
+    text-decoration: none;
+}
+
+.post-content-info {
+    color: grey;
+}
+
+.post-content-buttons {
+    padding-top: 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid cornflowerblue;
+}
+
+.inside-comments {
+    /*margin-top: 10px;*/
+}
+
+.comment-form > button {
+    float: right;
+    margin-right: 10px;
+}
+
+.friend-form {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.pict-and-name-container {
+    width: 86%;
+    float: left;
+    padding-left: 15px
+}
+
+.pict-and-name-container > a {
+    font-size: large;
+    text-decoration: none;
+}
+
+.pict-and-name-container img {
+    max-height: 70px;
+    border-radius: 20px;
+    margin-right: 10px;
+    width: 70px;
+}
+
+.friend-form img {
+
+}
+
+.friend-form-btn-container {
+    width: 12%;
+    float: left;
+    text-align: right;
+    padding-top: 12px;
+}
+
+.friend-form-container {
+    border-bottom: 1px solid #B2D4FF;
+}
+
+.all-friends-containers {
+    border-top: 1px solid #B2D4FF;
+}
+
+textarea {
+    resize: none;
+}
+
+.received-message {
+    background-color: lightblue;
+    padding: 10px;
+    border-radius: 33px;
+    margin-bottom: 10px;
+}
+
+.sended-message {
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 33px;
+    margin-bottom: 10px;
+}
+
+.message-text {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: justify;
+}

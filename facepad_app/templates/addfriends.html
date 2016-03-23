@@ -1,0 +1,37 @@
+{% extends 'portal.html' %}
+{% load static %}
+{% block inside_content %}
+    <div class="all-post-container col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-2 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+        <h2>Add friends...</h2>
+
+        <div class="all-friends-containers">
+            {#TODO: Iterate over all the friends#}
+            {% for f in no_friends %}
+                <div class="friend-form-container">
+
+                    <form class="form-inline friend-form" id="form_{{ f.id }}" method="post"
+                          action="{% url 'add_friend' %}">{% csrf_token %}
+                        {% if f.avatar %}
+                            <div class="pict-and-name-container">
+                                <a><img src="{{ f.avatar.url }}">{{ f.name }}</a>
+                            </div>
+                        {% else %}
+                            <div class="pict-and-name-container">
+                                <a><img src="{% static 'img/unknown.jpg' %}">{{ f.name }}</a>
+                            </div>
+                        {% endif %}
+                        <input name="name" value="{{ f.name }}" hidden>
+                        <input name="user" value="{{ f.id }}" hidden>
+                        <input name="html" value="addfriend.html" hidden>
+
+                        <div class="friend-form-btn-container">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon-plus"></i></button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}

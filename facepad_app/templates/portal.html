@@ -1,0 +1,241 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>facepad</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+
+</head>
+
+<body role="document">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">facepad</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{% url 'portal' %}">Home</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+                <li><a href="{% url 'add_friend' %}">Add Friends</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Sections <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for section in sections %}
+                            <li><a href="{% url 'view_post' section.id %}">{{ section.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<!-- /Left navigatio -->
+<div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        {% if user.avatar %}
+            <li class="sidebar-brand"><img src="{{ user.avatar.url }}"></li>
+        {% else %}
+            <li class="sidebar-brand"><img src="{% static 'img/unknown.jpg' %}"></li>
+        {% endif %}
+        <li>{{ user.name }}</li>
+        <li>{{ user.date|date }}</li>
+        <li>
+            <h2>Friends</h2>
+        </li>
+        {# TODO: Here goes a for loop#}
+        {% for f in user.friend.all %}
+            {% if f.avatar %}
+                <li class="friend-li">
+                    <a href="{% url 'message' f.id %}"><img src="{{ f.avatar.url }}">{{ f.name }}</a>
+                </li>
+            {% else %}
+                <li class="friend-li">
+                    <a href="{% url 'message' f.id %}"><img src="{% static 'img/unknown.jpg' %}">{{ f.name }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- /container -->
+<div class="container left-margin" role="main">
+    {% block inside_content %}
+        <div class="all-post-container col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+            <h2>Recent Posts</h2>
+
+            {# TODO: Here goes a for loop #}
+            {% for p in post %}
+                <div class="post">
+                    <div class="post-user-info">
+                        {% if p.user.avatar %}
+                            <img style="float: left" src="{{ p.user.avatar.url }}">
+                        {% else %}
+                            <img src="{% static 'img/unknown.jpg' %}">
+                        {% endif %}
+
+                        <div style="float: left">
+                            <div class="post-user-name">
+                                {#TODO: Here goes the name of the author#}
+                                <a>{{ p.user.name }}</a>
+                            </div>
+                            <div class="post-user-date">
+                                {#TODO: Here goes the date of the post#}
+                                <a>{{ p.date }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        <div class="post-content-text">
+                            <p>{{ p.content|safe }} </p>
+
+                            <p class="post-content-info">
+                                {{ p.count }} Likes and {{ p.comments_count }} comments
+                            </p>
+                        </div>
+                        <div class="post-content-buttons">
+                            {# TODO: Form's should in the form form_type_id#}
+                            <form id="form_post_{{ p.id }}" method="post" action="/likes/">{% csrf_token %}
+                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                    {#TODO:Argument of LikeMe should be in the form type_id (type is post or comment)#}
+                                    <a href="#" onclick="LikeMe('post_{{ p.id }}')" class="post-content-like-button">Like</a>
+                                    <input id="like_post_1" name="Like" value="1" hidden>
+                                    <input name="name" value="{{ user.name }}" hidden>
+                                    <input name="id" value="{{ p.id }}" hidden>
+                                    <input name="html" value="portal.html" hidden>
+                                    <input name="type" value="1" hidden>
+                                </div>
+                            </form>
+                            <form class="form-inline comment-form" id="form_id" method="post"
+                                  action="/comment/">{% csrf_token %}
+                                <div style="width: 88%; float: left; padding-left: 15px">
+                                    <div class="form-group" style="width: 100%">
+                                        <div style="float: left; margin-right: 10px">
+                                            {% if user.avatar %}
+                                                <img style="height: 34px; border-radius: 20px"
+                                                     src="{{ user.avatar.url }}">
+                                            {% else %}
+                                                <img style="height: 34px; border-radius: 20px"
+                                                     src="{% static 'img/unknown.jpg' %}">
+                                            {% endif %}
+                                        </div>
+                                        <div style="float: left; width: 91%">
+                                            <input style="width: 100%" type="text" class="form-control"
+                                                   name="comment"
+                                                   placeholder="Type your comment" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input name="name" value="{{ user.name }}" hidden>
+                                <input name="id" value="{{ p.id }}" hidden>
+                                <input name="html" value="portal.html" hidden>
+
+                                <div style="width: 12%; float: left">
+                                    <button type="submit" class="btn btn-default">Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {#TODO: Here the post's comments#}
+                    <div class="post-content inside-comments col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        {#TODO: create a div like this for every post#}
+                        {% for c in p.comments.all %}
+                            <div class="post">
+                                <div class="post-user-info">
+                                    {% if c.user.avatar %}
+                                        <img style="float: left" src="{{ c.user.avatar.url }}">
+                                    {% else %}
+                                        <img style="float: left" src="{% static 'img/unknown.jpg' %}">
+                                    {% endif %}
+                                    <div style="float: left">
+                                        <div class="post-user-name">
+                                            {#TODO: Here goes the name of the author#}
+                                            <a>{{ c.user.name }}</a>
+                                        </div>
+                                        <div class="post-user-date">
+                                            {#TODO: Here goes the date of the post#}
+                                            <a>{{ c.date|date }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-content col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                    <div class="post-content-text">
+                                        <p>{{ c.content|safe }}</p>
+
+                                        <p class="post-content-info">
+                                            {{ c.count }} Likes
+                                        </p>
+                                    </div>
+                                    <div class="post-content-buttons">
+                                        <form id="form_comment_{{ c.id }}" method="post"
+                                              action="/likes/">{% csrf_token %}
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                                {#TODO:Argument of LikeMe should be in the form type_id (type is post or comment)#}
+                                                <a href="#" onclick="LikeMe('comment_{{ c.id }}')"
+                                                   class="post-content-like-button">Like</a>
+                                                <input id="like_comment_{{ c.id }}" name="Like" value="1" hidden>
+                                                <input name="name" value="{{ user.name }}" hidden>
+                                                <input name="id" value="{{ c.id }}" hidden>
+                                                <input name="html" value="portal.html" hidden>
+                                                <input name="type" value="0" hidden>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+    {% endblock %}
+</div>
+<!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/docs.min.js' %}"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+<script>
+    function LikeMe(suffix) {
+        document.getElementById("form_" + suffix).submit();
+    }
+</script>
+</body>
+</html>

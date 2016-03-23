@@ -1,0 +1,144 @@
+{% extends 'portal.html' %}
+{% load static %}
+
+
+{% block inside_content %}
+    <div class="all-post-container col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+        <h2>Add post</h2>
+        <form id="message_fom" method="post" action="/section/{{ section.id }}/">{% csrf_token %}
+            <div class="form-group">
+                <textarea style="border-radius: 21px;" name="message" class="form-control" rows="3"
+                          placeholder="What's on your mind?"></textarea>
+            </div>
+            <button type="submit" form="message_fom" class="btn btn-default">Submit</button>
+        </form>
+        <h2>Posts of {{ section.name }}</h2>
+        {# TODO: Here goes a for loop #}
+        {% for p in section.posts.all %}
+            <div class="post">
+                <div class="post-user-info">
+                    {% if p.user.avatar %}
+                        <img style="float: left" src="{{ p.user.avatar.url }}">
+                    {% else %}
+                        <img src="{% static 'img/unknown.jpg' %}">
+                    {% endif %}
+
+                    <div style="float: left">
+                        <div class="post-user-name">
+                            {#TODO: Here goes the name of the author#}
+                            <a>{{ p.user.name }}</a>
+                        </div>
+                        <div class="post-user-date">
+                            {#TODO: Here goes the date of the post#}
+                            <a>{{ p.date }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    <div class="post-content-text">
+                        <p>{{ p.content|safe }} </p>
+
+                        <p class="post-content-info">
+                            {{ p.count }} Likes and {{ p.comments_count }} comments
+                        </p>
+                    </div>
+                    <div class="post-content-buttons">
+                        {# TODO: Form's should in the form form_type_id#}
+                        <form id="form_post_{{ p.id }}" method="post" action="/likes/">{% csrf_token %}
+                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                {#TODO:Argument of LikeMe should be in the form type_id (type is post or comment)#}
+                                <a href="#" onclick="LikeMe('post_{{ p.id }}')"
+                                   class="post-content-like-button">Like</a>
+                                <input id="like_post_1" name="Like" value="1" hidden>
+                                <input name="name" value="{{ user.name }}" hidden>
+                                <input name="id" value="{{ p.id }}" hidden>
+                                <input name="html" value="section.html" hidden>
+                                <input name="type" value="1" hidden>
+                            </div>
+                        </form>
+                        <form class="form-inline comment-form" id="form_id" method="post"
+                              action="/comment/">{% csrf_token %}
+                            <div style="width: 88%; float: left; padding-left: 15px">
+                                <div class="form-group" style="width: 100%">
+                                    <div style="float: left; margin-right: 10px">
+                                        {% if user.avatar %}
+                                            <img style="height: 34px; border-radius: 20px"
+                                                 src="{{ user.avatar.url }}">
+                                        {% else %}
+                                            <img style="height: 34px; border-radius: 20px"
+                                                 src="{% static 'img/unknown.jpg' %}">
+                                        {% endif %}
+                                    </div>
+                                    <div style="float: left; width: 91%">
+                                        <input style="width: 100%" type="text" class="form-control"
+                                               name="comment"
+                                               placeholder="Type your comment" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <input name="name" value="{{ user.name }}" hidden>
+                            <input name="id" value="{{ p.id }}" hidden>
+                            <input name="html" value="section.html" hidden>
+
+                            <div style="width: 12%; float: left">
+                                <button type="submit" class="btn btn-default">Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {#TODO: Here the post's comments#}
+                <div class="post-content inside-comments col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    {#TODO: create a div like this for every post#}
+                    {% for c in p.comments.all %}
+                        <div class="post">
+                            <div class="post-user-info">
+                                {% if c.user.avatar %}
+                                    <img style="float: left" src="{{ c.user.avatar.url }}">
+                                {% else %}
+                                    <img style="float: left" src="{% static 'img/unknown.jpg' %}">
+                                {% endif %}
+                                <div style="float: left">
+                                    <div class="post-user-name">
+                                        {#TODO: Here goes the name of the author#}
+                                        <a>{{ c.user.name }}</a>
+                                    </div>
+                                    <div class="post-user-date">
+                                        {#TODO: Here goes the date of the post#}
+                                        <a>{{ c.date|date }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-content col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                <div class="post-content-text">
+                                    <p>{{ c.content|safe }}</p>
+
+                                    <p class="post-content-info">
+                                        {{ c.count }} Likes
+                                    </p>
+                                </div>
+                                <div class="post-content-buttons">
+                                    <form id="form_comment_{{ c.id }}" method="post"
+                                          action="/likes/">{% csrf_token %}
+                                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                            {#TODO:Argument of LikeMe should be in the form type_id (type is post or comment)#}
+                                            <a href="#" onclick="LikeMe('comment_{{ c.id }}')"
+                                               class="post-content-like-button">Like</a>
+                                            <input id="like_comment_{{ c.id }}" name="Like" value="1" hidden>
+                                            <input name="name" value="{{ user.name }}" hidden>
+                                            <input name="id" value="{{ c.id }}" hidden>
+                                            <input name="html" value="section.html" hidden>
+                                            <input name="type" value="0" hidden>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

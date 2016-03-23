@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    {% block title %}
+        <title>Sign up</title>
+    {% endblock %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+</head>
+
+<body>
+{% block content %}
+    <div class="container">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <span>{{ error }}</span>
+            </div>
+        {% endif %}
+        <form id="login_info" class="form-signin" method="post" action="{% url 'signup' %}">{% csrf_token %}
+
+            <h2 class="form-signin-heading">Sign in</h2>
+
+            <label for="name" class="sr-only">Email address</label>
+            <input type="text" name="name" class="form-control" placeholder="Name" value="" required
+                   autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" class="form-control" value=""
+                   placeholder="Password" required>
+            <label for="avatar" class="sr-only">Avatar</label>
+            <input style="display: none" type="file" id="avatar_uploader" name="avatar" class="form-control form-control-file" value=""
+                   placeholder="Avatar" hidden>
+            <label for="date" class="sr-only">When is your birthday?</label>
+            <input type="date" name="date" class="form-control"
+                   placeholder="When is your birthday? (yyyy-mm-dd)" required>
+            <button type="button" class="btn btn-lg btn-primary btn-block reduce-size" onclick="UploadPic()">Upload
+                avatar
+            </button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" form="login_info">Sign in</button>
+        </form>
+
+
+    </div> <!-- /container -->
+{% endblock %}
+
+{% block particular_js %}
+    <script>
+        function UploadPic() {
+            document.getElementById("avatar_uploader").click();
+        }
+    </script>
+{% endblock %}
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+</body>
+</html>

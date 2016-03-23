@@ -1,0 +1,26 @@
+{% extends 'signup.html' %}
+{% block title %}
+    <title>Log in</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <span>{{ error }}</span>
+            </div>
+        {% endif %}
+        <form id="login_info" class="form-signin" method="post" action="{% url 'login' %}">{% csrf_token %}
+            <h2 class="form-signin-heading">Please log in</h2>
+            <label for="name" class="sr-only">Email address</label>
+            <input type="text" name="name" class="form-control" placeholder="Name" value="" required
+                   autofocus>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" class="form-control" value=""
+                   placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" form="login_info">Log in</button>
+        </form>
+        <div style="text-align: center"><a href='/signup/'>Sign up</a></div>
+
+    </div>
+
+{% endblock %}

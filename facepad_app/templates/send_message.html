@@ -1,0 +1,45 @@
+{% extends 'portal.html' %}
+{% load static %}
+{% block inside_content %}
+    <div class="all-post-container col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-2 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+        <h2>Messages with {{ friend.name }}</h2>
+        {% for m in message %}
+            {% if m.receiverUser.id == friend.id %}
+                <div class="received-message">
+                    <div class="post-user-info">
+                        {% if m.senderUser.avatar %}
+                            <img style="float: left" src="{{ m.senderUser.avatar.url }}">
+                        {% else %}
+                            <img style="float: left" src="{% static 'img/unknown.jpg' %}">{% endif %}
+                        <div style="float: left; width: 624px">
+                            <p class="message-text">{{ m.content|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="sended-message">
+                    <div class="post-user-info">
+                        {% if m.senderUser.avatar %}
+                            <img style="float: right; margin-right: 0px; margin-left: 10px;"
+                                 src="{{ m.senderUser.avatar.url }}">
+                        {% else %}
+                            <img style="float: right; margin-right: 0px; margin-left: 10px;"
+                                 src="{% static 'img/unknown.jpg' %}">
+                        {% endif %}
+
+                        <div style="float: right; width: 624px">
+                            <p class="message-text">{{ m.content|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <form id="message_fom" method="post" action="/send_message/{{ friend.id }}/">{% csrf_token %}
+            <div class="form-group">
+                <textarea style="border-radius: 21px;" name="message" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" form="message_fom" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}
